@@ -10,10 +10,26 @@ from .models import Solicitud
 #Serializers
 from .serializers import *
 
-class SolicitudListado(APIView):
-    """Vista listado de solicitudes"""
+class SolicitudListadoET(APIView):
+    """Vista listado de solicitudes en tramite"""
     def get(self, request, *args, **kwargs):
-        solicitud = Solicitud.objects.all()
+        solicitud = Solicitud.objects.filter(estado="ET")
+        serializer = SolicitudSerializer(solicitud, many=True)
+        return Response(serializer.data)
+
+
+class SolicitudListadoAP(APIView):
+    """Vista listado de solicitudes aprobadas"""
+    def get(self, request, *args, **kwargs):
+        solicitud = Solicitud.objects.filter(estado="AP")
+        serializer = SolicitudSerializer(solicitud, many=True)
+        return Response(serializer.data)
+
+
+class SolicitudListadoDN(APIView):
+    """Vista listado de solicitudes denegadas"""
+    def get(self, request, *args, **kwargs):
+        solicitud = Solicitud.objects.filter(estado="DN")
         serializer = SolicitudSerializer(solicitud, many=True)
         return Response(serializer.data)
 
@@ -27,3 +43,21 @@ class SolicitudCrear(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class SolicitudApobar(APIView):
+    """Vista aprobar solicitud"""
+    def put(self, pk):
+        solicitud = Solicitud.objects.get(id=pk)
+        solicitud.estado = 'AP'
+        solicitud.save()
+        return Response("Aprobado")
+
+
+class SolicitudDenegar(APIView):
+    """Vista denegar solicitud"""
+    def put(self, pk):
+        solicitud = Solicitud.objects.get(id=pk)
+        solicitud.estado = 'DN'
+        solicitud.save()
+        return Response("Denegado")

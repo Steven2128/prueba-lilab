@@ -1,0 +1,26 @@
+<app-menu></app-menu>
+<div class="container mt-3">
+    <h3 class="text-center">Bandeja de solicitudes aprobadas</h3>
+    <table class="table table-striped text-center mt-3">
+       <thead>
+           <th>#</th>
+           <th>Nombres</th>
+           <th>Apellidos</th>
+           <th>Monto total</th>
+           <th>Estado</th>
+           <th>Indicador sentinel</th>
+       </thead>
+       <tbody>
+           <tr *ngFor="let sol of solicitudes; let i = index">
+               <td>{{ i+1 }}</td>
+               <td>{{ sol.nombres }}</td>
+               <td>{{ sol.apellidos }}</td>
+               <td>{{ sol.monto_total }}</td>
+               <td><span class="badge bg-success">Aprobada</span></td>
+               <td *ngIf="sol.indicador_sentinel == 'M'"><span class="badge bg-danger">Malo</span></td>
+               <td *ngIf="sol.indicador_sentinel == 'R'"><span class="badge bg-warning text-dark">Regular</span></td>
+               <td *ngIf="sol.indicador_sentinel == 'B'"><span class="badge bg-success">Bueno</span></td>
+           </tr>
+       </tbody>
+    </table>
+</div>
